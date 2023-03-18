@@ -1,0 +1,36 @@
+spring:
+  profiles:
+    active: local
+server:
+  port: 8585
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  kafka:
+    template:
+      default-topic: topics-events
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    properties:
+      acks: all
+      retries: 10
+#        retry.backoff.ms: 1000
+    admin:
+      properties:
+        bootstrap.services: localhost:9092
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  kafka:
+    producer:
+      bootstrap-servers: prod:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
