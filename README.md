@@ -1,6 +1,6 @@
 # TaskProcessingProducer
 ## About project
-This id a demo application for CDQ interview purposes. 
+This id a demo Kafka producer application. 
 
 ## Prerequisites
 The following tools are required to start the application:
