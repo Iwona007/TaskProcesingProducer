@@ -34,7 +34,7 @@ services:
     ports:
       - "8585:8585"
     depends_on:
-      - database
+      - task_producer_database
     environment:
       SPRING_PROFILES_ACTIVE: dev
       DB_SERVER: database
