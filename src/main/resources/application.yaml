@@ -1,13 +1,13 @@
 spring:
   profiles:
-    active: local
+    active: dev
 server:
   port: 8585
 ---
 spring:
   config:
     activate:
-      on-profile: local
+      on-profile: dev
   kafka:
     template:
       default-topic: topics-events

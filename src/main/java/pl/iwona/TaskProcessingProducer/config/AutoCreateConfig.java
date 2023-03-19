@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.config.TopicBuilder;
 
 @Configuration
-@Profile("local")
+@Profile("dev")
 public class AutoCreateConfig {
     @Bean
     public NewTopic taskEvents() {
