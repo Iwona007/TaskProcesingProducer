@@ -23,6 +23,7 @@ public class TaskServiceImpl {
          Task task = Task.builder()
                  .pattern(pattern)
                  .input(input)
+                 .status("0%")
                  .taskType(TaskType.NEW)
                  .build();
         return task;
@@ -42,8 +43,15 @@ public class TaskServiceImpl {
     public void saveTaskList(String pattern, String input) {
         taskProducerRepository.saveAll(createListTask(pattern, input));
     }
-    public Optional<Task> findTaskById(Integer taskId) {
 
-        return Optional.empty();
+    public Task findTaskById(Integer taskId) {
+        final Optional<Task> findTaskById = taskProducerRepository.findById(taskId);
+
+        if(findTaskById.isEmpty()) {
+            Optional.empty();
+        } else {
+            return findTaskById.get();
+        }
+        return  null;
     }
 }

@@ -16,16 +16,18 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/app")
 public class TaskEventsController {
 
-    @Autowired
     private TaskServiceImpl taskService;
 
-    @Autowired
     private TaskEventProducer taskEventProducer;
+    @Autowired
+    public TaskEventsController(TaskServiceImpl taskService, TaskEventProducer taskEventProducer) {
+        this.taskService = taskService;
+        this.taskEventProducer = taskEventProducer;
+    }
 
     @PostMapping("/tasks")
     public ResponseEntity<Task> createTask(@RequestParam String pattern, @RequestParam String input)
@@ -48,7 +50,7 @@ public class TaskEventsController {
 
     @GetMapping("/tasks/{taskId}")
     public ResponseEntity<Optional<Task>> findTaskById(@PathVariable Integer taskId) {
-        final Optional<Task> task = this.taskService.findTaskById(taskId);
+        final Optional<Task> task = Optional.ofNullable(this.taskService.findTaskById(taskId));
         return new ResponseEntity<>(task, HttpStatus.FOUND);
     }
 
@@ -63,3 +65,5 @@ public class TaskEventsController {
 //        return this.taskService.readStatusAndResult(taskId);
 //    }
 }
+
+
