@@ -1,0 +1,73 @@
+version: "3"
+services:
+  zookeeper:
+    image: 'bitnami/zookeeper:3.4.10'
+    container_name: task_producer_zookeeper
+    networks:
+      - task_producer_network
+    ports:
+      - '2181:2181'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  kafka:
+    image: 'bitnami/kafka:3.4.0'
+    container_name: task_producer_kafka
+    networks:
+      - task_producer_network
+    ports:
+      - '9092:9092'
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
+
+  backend:
+    build: .
+    container_name: task_producer_backend
+    restart: always
+    networks:
+      - task_producer_network
+    ports:
+      - "8585:8585"
+    depends_on:
+      - task_producer_database
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_SERVER: database
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+
+  database:
+    container_name: task_producer_database
+    image: mysql:8
+    restart: always
+    networks:
+      - task_producer_network
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: taskprocesing
+      MYSQL_USER: user
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
+        reservations:
+          memory: '128M'
+    ports:
+      - '3308:3306'
+    volumes:
+      - dbstore:/var/lib/mysql
+
+networks:
+  task_producer_network:
+    driver: bridge
+
+volumes:
+  dbstore:
