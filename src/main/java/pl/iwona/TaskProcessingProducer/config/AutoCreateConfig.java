@@ -13,7 +13,7 @@ public class AutoCreateConfig {
     public NewTopic taskEvents() {
         return TopicBuilder.name("topics-events")
                 .partitions(3)
-                .replicas(3)
+                .replicas(1)
                 .build();
     }
 }

@@ -12,7 +12,7 @@ spring:
     template:
       default-topic: topics-events
     producer:
-      bootstrap-servers: localhost:9092
+      bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
       key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
     properties:
@@ -21,8 +21,28 @@ spring:
 #        retry.backoff.ms: 1000
     admin:
       properties:
-        bootstrap.services: localhost:9092
+        bootstrap.services: localhost:9092,localhost:9093,localhost:9094
 
+
+  #Datasource
+  datasource:
+    url: jdbc:mysql://localhost:3306/taskprocesing?useUnicode=true&serverTimezone=UTC
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  #Jpa/Hibernate:
+  jpa:
+    open-in-view: false
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    #do debugowania sql
+    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
 
 ---
 spring:
