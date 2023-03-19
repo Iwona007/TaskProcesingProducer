@@ -9,16 +9,18 @@ import pl.iwona.TaskProcessingProducer.repository.TaskProducerRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-
-@Service
 @Slf4j
-public class TaskServiceImpl {
+@Service
+public class TaskServiceProducerImpl implements TaskServiceProducer {
 
+    private final TaskProducerRepository taskProducerRepository;
     @Autowired
-    private TaskProducerRepository taskProducerRepository;
+    public TaskServiceProducerImpl(TaskProducerRepository taskProducerRepository) {
+        this.taskProducerRepository = taskProducerRepository;
+    }
 
+    @Override
     public Task createTask(String pattern, String input) {
          Task task = Task.builder()
                  .pattern(pattern)
@@ -26,32 +28,13 @@ public class TaskServiceImpl {
                  .status("0%")
                  .taskType(TaskType.NEW)
                  .build();
-        return task;
+        return taskProducerRepository.save(task);
     }
-
-    public Task saveTask(String pattern, String input) {
-       return taskProducerRepository.save(createTask(pattern, input));
-    }
-
+    @Override
     public List<Task> createListTask(String pattern, String input) {
         List<Task> taskList = new ArrayList<>();
         Task task = createTask(pattern, input);
         taskList.add(task);
-        return taskList;
-    }
-
-    public void saveTaskList(String pattern, String input) {
-        taskProducerRepository.saveAll(createListTask(pattern, input));
-    }
-
-    public Task findTaskById(Integer taskId) {
-        final Optional<Task> findTaskById = taskProducerRepository.findById(taskId);
-
-        if(findTaskById.isEmpty()) {
-            Optional.empty();
-        } else {
-            return findTaskById.get();
-        }
-        return  null;
+        return taskProducerRepository.saveAll(taskList);
     }
 }

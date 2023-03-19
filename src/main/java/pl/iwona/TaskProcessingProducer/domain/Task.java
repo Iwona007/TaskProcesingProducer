@@ -14,9 +14,8 @@ import java.io.Serializable;
 @Data
 @Builder
 @Entity
+@Table(name = "tasks")
 public class Task {
-
-//    public static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +31,4 @@ public class Task {
     private String result;
 
     private String status;
-
-//    private TaskEvent taskEvent;
 }

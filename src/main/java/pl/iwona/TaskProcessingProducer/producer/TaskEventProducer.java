@@ -13,20 +13,23 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 import pl.iwona.TaskProcessingProducer.domain.Task;
-import pl.iwona.TaskProcessingProducer.domain.TaskEvent;
 
 import java.util.List;
 
-@Component
 @Slf4j
+@Component
 public class TaskEventProducer {
 
+    private final KafkaTemplate<Integer, String> kafkaTemplate;
+
+    private final ObjectMapper objectMapper;
     @Autowired
-    private KafkaTemplate<Integer, String> kafkaTemplate;
+    public TaskEventProducer(KafkaTemplate<Integer, String> kafkaTemplate, ObjectMapper objectMapper) {
+        this.kafkaTemplate = kafkaTemplate;
+        this.objectMapper = objectMapper;
+    }
 
     private final String topic = "task-events";
-    @Autowired
-    private ObjectMapper objectMapper;
 
     public ListenableFuture<SendResult<Integer, String>> sendTaskEvent(Task task)
             throws JsonProcessingException {
