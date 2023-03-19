@@ -1,4 +1,4 @@
-package pl.iwona.TaskProcessingProducer.repository;
+package pl.iwona.TaskProcessingProducer.logic.repository;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

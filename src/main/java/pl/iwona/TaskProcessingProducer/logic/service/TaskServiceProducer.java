@@ -1,4 +1,4 @@
-package pl.iwona.TaskProcessingProducer.service;
+package pl.iwona.TaskProcessingProducer.logic.service;
 
 
 import pl.iwona.TaskProcessingProducer.domain.Task;

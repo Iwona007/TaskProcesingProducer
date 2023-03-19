@@ -1,11 +1,11 @@
-package pl.iwona.TaskProcessingProducer.service;
+package pl.iwona.TaskProcessingProducer.logic.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.iwona.TaskProcessingProducer.domain.Task;
 import pl.iwona.TaskProcessingProducer.domain.TaskType;
-import pl.iwona.TaskProcessingProducer.repository.TaskProducerRepository;
+import pl.iwona.TaskProcessingProducer.logic.repository.TaskProducerRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +22,15 @@ public class TaskServiceProducerImpl implements TaskServiceProducer {
 
     @Override
     public Task createTask(String pattern, String input) {
-         Task task = Task.builder()
-                 .pattern(pattern)
-                 .input(input)
-                 .status("0%")
-                 .taskType(TaskType.NEW)
-                 .build();
-        return taskProducerRepository.save(task);
-    }
+            var task = Task.builder()
+                    .pattern(pattern)
+                    .input(input)
+                    .status("0%")
+                    .taskType(TaskType.NEW)
+                    .build();
+            return taskProducerRepository.save(task);
+        }
+
     @Override
     public List<Task> createListTask(String pattern, String input) {
         List<Task> taskList = new ArrayList<>();
