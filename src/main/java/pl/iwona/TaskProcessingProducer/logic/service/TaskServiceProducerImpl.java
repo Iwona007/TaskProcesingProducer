@@ -3,9 +3,10 @@ package pl.iwona.TaskProcessingProducer.logic.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pl.iwona.TaskProcessingProducer.domain.Task;
+import pl.iwona.TaskProcessingProducer.domain.entity.TaskEntity;
 import pl.iwona.TaskProcessingProducer.domain.TaskProgress;
 import pl.iwona.TaskProcessingProducer.domain.TaskType;
+import pl.iwona.TaskProcessingProducer.domain.mapper.TaskMapper;
 import pl.iwona.TaskProcessingProducer.logic.repository.TaskProducerRepository;
 
 import java.util.ArrayList;
@@ -18,41 +19,42 @@ import java.util.stream.Collectors;
 public class TaskServiceProducerImpl implements TaskServiceProducer {
 
     private final TaskProducerRepository taskProducerRepository;
+    private final TaskMapper taskMapper;
 
     @Override
-    public Task createTask(String pattern, String input) {
+    public TaskEntity createTask(String pattern, String input) {
         var task = createNewTask(pattern, input);
         return taskProducerRepository.save(task);
     }
 
     @Override
-    public List<Task> addTaskToList(String pattern, String input) {
-        List<Task> taskList = new ArrayList<>();
+    public List<TaskEntity> addTaskToList(String pattern, String input) {
+        List<TaskEntity> taskEntityList = new ArrayList<>();
         var task = createTask(pattern, input);
-        taskList.add(task);
-        return taskProducerRepository.saveAll(taskList);
+        taskEntityList.add(task);
+        return taskProducerRepository.saveAll(taskEntityList);
     }
 
     @Override
-    public List<Task> createListTask(List<Task> tasks) {
-        final List<Task> taskList = tasks.stream().map(this::buildTaskInList).collect(Collectors.toList());
-        return taskProducerRepository.saveAll(taskList);
+    public List<TaskEntity> createListTask(List<TaskEntity> taskEntities) {
+        final List<TaskEntity> taskEntityList = taskEntities.stream().map(this::buildTaskInList).collect(Collectors.toList());
+        return taskProducerRepository.saveAll(taskEntityList);
     }
 
-    public List<Task> createListTaskLoop(List<Task> tasks) {
-        for (Task oneTask : tasks) {
-            tasks.add(buildTaskInList(oneTask));
+    public List<TaskEntity> createListTaskLoop(List<TaskEntity> taskEntities) {
+        for (TaskEntity oneTaskEntity : taskEntities) {
+            taskEntities.add(buildTaskInList(oneTaskEntity));
         }
-        return taskProducerRepository.saveAll(tasks);
+        return taskProducerRepository.saveAll(taskEntities);
     }
 
     @Override
-    public List<Task> getAllTasks() {
+    public List<TaskEntity> getAllTasks() {
         return taskProducerRepository.findAll();
     }
 
-    private Task createNewTask(String pattern, String input) {
-        return Task.builder()
+    private TaskEntity createNewTask(String pattern, String input) {
+        return TaskEntity.builder()
                 .pattern(pattern)
                 .input(input)
                 .status(TaskProgress.ZERO.getPercentage())
@@ -60,14 +62,14 @@ public class TaskServiceProducerImpl implements TaskServiceProducer {
                 .build();
     }
 
-    private Task buildTaskInList(Task task) {
-        return Task
+    private TaskEntity buildTaskInList(TaskEntity taskEntity) {
+        return TaskEntity
                 .builder()
-                .taskType(task.getTaskType())
-                .pattern(task.getPattern())
-                .input(task.getInput())
-                .result(task.getResult())
-                .status(task.getStatus())
+                .taskType(taskEntity.getTaskType())
+                .pattern(taskEntity.getPattern())
+                .input(taskEntity.getInput())
+                .result(taskEntity.getResult())
+                .status(taskEntity.getStatus())
                 .build();
     }
 }

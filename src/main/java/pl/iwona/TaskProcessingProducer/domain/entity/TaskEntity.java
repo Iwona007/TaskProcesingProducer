@@ -1,10 +1,11 @@
-package pl.iwona.TaskProcessingProducer.domain;
+package pl.iwona.TaskProcessingProducer.domain.entity;
 
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.iwona.TaskProcessingProducer.domain.TaskType;
 
 import javax.persistence.*;
 
@@ -14,7 +15,7 @@ import javax.persistence.*;
 @Builder
 @Entity
 @Table(name = "tasks")
-public class Task {
+public class TaskEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

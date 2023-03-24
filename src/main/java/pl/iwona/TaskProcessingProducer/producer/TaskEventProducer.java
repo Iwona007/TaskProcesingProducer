@@ -12,7 +12,8 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
-import pl.iwona.TaskProcessingProducer.domain.Task;
+import pl.iwona.TaskProcessingProducer.domain.TaskDto.TaskDto;
+import pl.iwona.TaskProcessingProducer.domain.entity.TaskEntity;
 
 import java.util.List;
 
@@ -31,11 +32,11 @@ public class TaskEventProducer {
 
     private final String topic = "task-events";
 
-    public ListenableFuture<SendResult<Integer, String>> sendTaskEvent(Task task)
+    public ListenableFuture<SendResult<Integer, String>> sendTaskEvent(TaskDto taskDto)
             throws JsonProcessingException {
 
-        var key = task.getTaskId();
-        var value = objectMapper.writeValueAsString(task);
+        var key = taskDto.getTaskId();
+        var value = objectMapper.writeValueAsString(taskDto);
 
         ProducerRecord<Integer, String> producerRecord = buildProducerRecord(topic, key, value );
         ListenableFuture<SendResult<Integer, String>> listenableFuture = kafkaTemplate.send(producerRecord);

@@ -38,7 +38,7 @@ Wait until the database server starts completely, it may take a while.
 After your docker and database was started, you can run application form IDEA on server port 8585.
 The default profile is "dev", but there is prepared prod profile as well. 
 When TaskProcessingProducer is running please use Postman to post request:
-http://localhost:8585/app/tasks?pattern=ABC&input=ADBCDEF
+http://localhost:8585/app/taskEntities?pattern=ABC&input=ADBCDEF
 than in the log console you can see log information 
 for example: Message Sent SuccessFully for the key : 1 and the value is 
 {"taskId":1,"input":"ADBCDEF","pattern":"ABC","taskType":"NEW","result":null,"status":"0%"} , 
