@@ -25,26 +25,9 @@ services:
     depends_on:
       - zookeeper
 
-  backend:
-    build: .
-    container_name: task_producer_backend
-    restart: always
-    networks:
-      - task_producer_network
-    ports:
-      - "8585:8585"
-    depends_on:
-      - task_producer_database
-    environment:
-      SPRING_PROFILES_ACTIVE: dev
-      DB_SERVER: database
-      DB_PORT: 3306
-      DB_USER: root
-      DB_PASSWORD: root
-
-  database:
+  db:
     container_name: task_producer_database
-    image: mysql:8
+    image: mysql:8.0
     restart: always
     networks:
       - task_producer_network
@@ -61,9 +44,27 @@ services:
         reservations:
           memory: '128M'
     ports:
-      - '3308:3306'
+      - '3307:3306'
     volumes:
       - dbstore:/var/lib/mysql
+
+  backend:
+    build: .
+    container_name: task_producer_backend
+    restart: always
+    networks:
+      - task_producer_network
+    ports:
+      - '8585:8585'
+    depends_on:
+      - db
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_SERVER: db
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: taskprocesing
 
 networks:
   task_producer_network:

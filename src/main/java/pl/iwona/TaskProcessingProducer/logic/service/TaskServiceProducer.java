@@ -9,5 +9,9 @@ public interface TaskServiceProducer {
 
     Task createTask(String pattern, String input);
 
-    List<Task> createListTask(String pattern, String input);
+    List<Task> addTaskToList(String pattern, String input);
+
+    List<Task> createListTask(List<Task> tasks);
+
+    List<Task> getAllTasks();
 }
